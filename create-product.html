@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Product | TechVault</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Theme -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: "#38bdf8",
+            bgDark: "#020617",
+            bgDeeper: "#01030a",
+            cardDark: "#0b1224",
+            borderDark: "#1e293b",
+            textSoft: "#94a3b8"
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background:
+        radial-gradient(900px 500px at 10% -10%, #0b3a6a30, transparent),
+        radial-gradient(800px 400px at 90% 10%, #0284c730, transparent),
+        linear-gradient(to bottom, #020617, #000);
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen text-slate-100">
+
+  <!-- NAVBAR -->
+  <nav class="sticky top-0 z-50 border-b border-slate-800 bg-slate-950/70 backdrop-blur-xl">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <h1 class="text-2xl font-black tracking-tight italic uppercase">
+        Tech<span class="text-sky-400">Vault</span>
+      </h1>
+
+      <div class="hidden md:flex gap-6 text-sm font-medium">
+        <a href="index.html" class="hover:text-sky-400">Home</a>
+        <a href="shop.html" class="hover:text-sky-400">Shop</a>
+        <a href="my-products.html" class="hover:text-sky-400">My Products</a>
+        <a href="create-product.html" class="text-sky-400">Create Product</a>
+      </div>
+
+      <a href="cart.html" class="hover:text-sky-400 transition">
+        🛒
+      </a>
+    </div>
+  </nav>
+
+  <!-- PAGE -->
+  <main class="flex items-center justify-center px-4 py-20">
+
+    <!-- CARD -->
+    <div class="w-full max-w-md rounded-2xl
+      bg-cardDark/80 backdrop-blur-2xl
+      border border-borderDark
+      shadow-[0_0_60px_-15px_#0284c7]
+      p-8">
+
+      <!-- HEADER -->
+      <div class="text-center mb-8">
+        <h2 class="text-3xl font-extrabold tracking-tight">
+          Create Product
+        </h2>
+        <p class="text-sm text-textSoft mt-1">
+          Add a new item to TechVault inventory
+        </p>
+      </div>
+
+      <!-- FORM -->
+      <form id="create-product-form" class="space-y-5">
+
+        <!-- INPUT -->
+        <div>
+          <label class="text-xs uppercase tracking-wide text-textSoft">Product Name</label>
+          <input id="name" type="text" required
+            placeholder="MacBook Pro M3"
+            class="mt-1 w-full rounded-lg bg-bgDark border border-borderDark
+            px-4 py-3 text-white
+            focus:outline-none focus:ring-2 focus:ring-sky-500/60 focus:border-sky-400"/>
+        </div>
+
+        <div>
+          <label class="text-xs uppercase tracking-wide text-textSoft">Price ($)</label>
+          <input id="price" type="number" step="0.01" required
+            placeholder="2499.99"
+            class="mt-1 w-full rounded-lg bg-bgDark border border-borderDark
+            px-4 py-3 text-white
+            focus:outline-none focus:ring-2 focus:ring-sky-500/60"/>
+        </div>
+
+        <div>
+          <label class="text-xs uppercase tracking-wide text-textSoft">Description</label>
+          <textarea id="description" rows="3"
+            placeholder="High-performance laptop with M3 chip"
+            class="mt-1 w-full rounded-lg bg-bgDark border border-borderDark
+            px-4 py-3 text-white resize-none
+            focus:outline-none focus:ring-2 focus:ring-sky-500/60"></textarea>
+        </div>
+
+        <div>
+          <label class="text-xs uppercase tracking-wide text-textSoft">Category</label>
+          <select id="category"
+            class="mt-1 w-full rounded-lg bg-bgDark border border-borderDark
+            px-4 py-3 text-white
+            focus:outline-none focus:ring-2 focus:ring-sky-500/60">
+            <option>Laptops</option>
+            <option>Gaming</option>
+            <option>Accessories</option>
+            <option>Smartphone</option>
+            <option>Clothing</option>
+            <option>Footwear</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-xs uppercase tracking-wide text-textSoft">Rating</label>
+          <input id="rating" type="number" min="0" max="5" step="0.1"
+            placeholder="4.8"
+            class="mt-1 w-full rounded-lg bg-bgDark border border-borderDark
+            px-4 py-3 text-white
+            focus:outline-none focus:ring-2 focus:ring-sky-500/60"/>
+        </div>
+
+        <div>
+          <label class="text-xs uppercase tracking-wide text-textSoft">Image URL</label>
+          <input id="imageUrl" type="url"
+            placeholder="https://image-link.com/product.png"
+            class="mt-1 w-full rounded-lg bg-bgDark border border-borderDark
+            px-4 py-3 text-white
+            focus:outline-none focus:ring-2 focus:ring-sky-500/60"/>
+        </div>
+
+        <!-- BUTTON -->
+        <button type="submit"
+          class="w-full mt-3 py-3 rounded-xl font-bold
+          bg-gradient-to-r from-sky-400 to-cyan-300
+          text-bgDark
+          transition-all duration-200
+          hover:scale-[1.03] hover:shadow-[0_0_25px_#38bdf8]
+          active:scale-95">
+          Create Product
+        </button>
+
+        <p id="message" class="text-center text-sm mt-3"></p>
+      </form>
+    </div>
+  </main>
+
+  <script src="create-product.js"></script>
+</body>
+</html>
+
+

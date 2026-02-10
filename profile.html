@@ -1,0 +1,148 @@
+
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #020617; color: #e2e8f0; font-family: 'Inter', sans-serif; }
+        .glass-card { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .shimmer { background: linear-gradient(90deg, #0f172a 25%, #1e293b 50%, #0f172a 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+    </style>
+</head>
+<nav class="border-b border-slate-800 bg-slate-950/50 backdrop-blur-md sticky top-0 z-40">
+  <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+    <h1 class="text-2xl font-black tracking-tighter italic uppercase">E-STORE</h1>
+    <div class="hidden md:flex items-center gap-6 text-sm font-medium">
+      <a href="index.html" class="hover:text-sky-400">Home</a>
+      <a href="shop.html" class="hover:text-sky-400">Shop</a>
+      <a href="contact.html" class="hover:text-sky-400">Contact</a>
+      <a href="about.html" class="hover:text-sky-400">About</a>
+      <a href="create-product.html" class="hover:text-sky-400">Create Product</a>
+      <a href="my-products.html" class="hover:text-sky-400">My Products</a>
+      <a href="signup.html" class="hover:text-sky-400">Sign Up</a>
+    </div>
+    <div class="flex gap-4 items-center">
+      <a href="cart.html">
+        <i class="fa-solid fa-cart-shopping cursor-pointer hover:text-sky-400"></i>
+    </a>
+    </div>
+  </div>
+</nav>
+<body class="min-h-screen">
+    <div id="navbar-placeholder"></div>
+
+    <div class="flex items-center justify-center px-4 py-20">
+        <div class="max-w-2xl w-full">
+            
+            <div class="flex justify-between items-center mb-8">
+                <h1 class="text-3xl font-bold text-white">Profile Settings</h1>
+                <a href="my-products.html" class="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-xl transition flex items-center gap-2">
+                    <i class="fas fa-box-open"></i> My Inventory
+                </a>
+            </div>
+
+            <div id="profile-container" class="glass-card rounded-3xl p-8 shadow-2xl relative overflow-hidden">
+                <div id="loading-overlay" class="space-y-6">
+                    <div class="flex items-center gap-6 mb-8">
+                        <div class="w-20 h-20 rounded-full shimmer"></div>
+                        <div class="space-y-2">
+                            <div class="h-6 w-48 shimmer rounded"></div>
+                            <div class="h-4 w-32 shimmer rounded"></div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="h-12 shimmer rounded"></div>
+                        <div class="h-12 shimmer rounded"></div>
+                    </div>
+                </div>
+
+                <div id="profile-content" class="hidden">
+                    <div class="flex flex-col md:flex-row items-center gap-8 mb-8 pb-8 border-b border-white/10">
+                        <div class="w-24 h-24 rounded-full bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center text-4xl font-bold text-white shadow-lg">
+                            <span id="avatar-init">?</span>
+                        </div>
+                        <div class="text-center md:text-left">
+                            <h2 id="user-full-name" class="text-2xl font-bold text-white">---</h2>
+                            <p id="user-username-display" class="text-blue-400">@---</p>
+                        </div>
+                        <button onclick="logout()" class="md:ml-auto text-slate-400 hover:text-red-400 transition">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase">First Name</label>
+                            <p id="user-name" class="text-lg text-slate-200 mt-1 border-b border-white/5 pb-2">---</p>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase">Last Name</label>
+                            <p id="user-surname" class="text-lg text-slate-200 mt-1 border-b border-white/5 pb-2">---</p>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="text-xs font-bold text-slate-500 uppercase">Email Address</label>
+                            <p id="user-email" class="text-lg text-slate-200 mt-1 border-b border-white/5 pb-2">---</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const token = localStorage.getItem("authToken");
+
+            if (!token) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            try {
+                const res = await fetch("http://localhost:8085/api/v1/users/me", {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+
+                if (!res.ok) {
+                    if (res.status === 401 || res.status === 403) {
+                        localStorage.removeItem("authToken");
+                        localStorage.removeItem("isLoggedIn");
+                        window.location.href = "login.html";
+                        return;
+                    }
+                    throw new Error(`Failed to load profile: ${res.status}`);
+                }
+
+                const user = await res.json();
+                const fullName = `${user.name || ""} ${user.surname || ""}`.trim() || user.username || "---";
+
+                document.getElementById("user-name").innerText = user.name || "---";
+                document.getElementById("user-surname").innerText = user.surname || "---";
+                document.getElementById("user-email").innerText = user.email || "---";
+                document.getElementById("user-full-name").innerText = fullName;
+                document.getElementById("user-username-display").innerText = `@${user.username || "---"}`;
+                document.getElementById("avatar-init").innerText = (user.name || user.username || "?").charAt(0).toUpperCase();
+
+                document.getElementById("loading-overlay").classList.add("hidden");
+                document.getElementById("profile-content").classList.remove("hidden");
+            } catch (err) {
+                console.error(err);
+                alert("Failed to load profile data. Make sure backend is running on http://localhost:8085.");
+            }
+        });
+
+        function logout() {
+            localStorage.removeItem("authToken");
+            localStorage.removeItem("isLoggedIn");
+            localStorage.removeItem("loggedInUser");
+            window.location.href = "login.html";
+        }
+    </script>
+</body>
+</html>
+

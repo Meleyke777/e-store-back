@@ -1,2 +1,2 @@
-# e-store-back
-backend of final project
+# developia-full-stack-front-template
+ 

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TechVault | Premium Shop</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+
+    :root {
+      --bg-deep: #020617;
+      --bg-darker: #01030a;
+      --card-bg: #0b1224;
+      --border-soft: #1e293b;
+      --accent: #38bdf8;
+      --accent-glow: rgba(56,189,248,.35);
+    }
+
+    body {
+      background:
+        radial-gradient(900px 500px at 10% -10%, #0b3a6a30, transparent),
+        radial-gradient(800px 400px at 90% 10%, #0284c730, transparent),
+        linear-gradient(to bottom, var(--bg-deep), var(--bg-darker));
+      color: #f1f5f9;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .glass {
+      background: linear-gradient(180deg, rgba(15,23,42,.85), rgba(2,6,23,.9));
+      backdrop-filter: blur(18px);
+      border: 1px solid var(--border-soft);
+    }
+
+    .product-card {
+      transition: all .35s cubic-bezier(.4,0,.2,1);
+    }
+    .product-card:hover {
+      transform: translateY(-10px);
+      border-color: var(--accent);
+      box-shadow: 0 25px 60px -20px var(--accent-glow);
+    }
+
+    .filter-item {
+      cursor: pointer;
+      padding: .6rem 1rem;
+      border-radius: .75rem;
+      transition: .2s;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+    .filter-item:hover {
+      background: rgba(255,255,255,.05);
+      color: white;
+    }
+    .filter-item.active {
+      background: var(--accent);
+      color: #020617;
+      font-weight: 700;
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-thumb { background:#334155; border-radius: 10px; }
+  </style>
+</head>
+
+<body class="pb-24">
+
+<!-- NAVBAR -->
+<nav class="sticky top-0 z-50 glass border-b border-slate-800">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <h1 class="text-2xl font-black italic tracking-tight uppercase">
+      E-<span class="text-sky-400">Store</span>
+    </h1>
+
+    <div class="hidden md:flex gap-6 text-sm font-medium">
+      <a href="index.html" class="hover:text-sky-400">Home</a>
+      <a href="shop.html" class="text-sky-400">Shop</a>
+      <a href="create-product.html" class="hover:text-sky-400">Create Product</a>
+      <a href="my-products.html" class="hover:text-sky-400">My Products</a>
+    </div>
+
+    <div class="flex gap-4 text-lg">
+      <a href="cart.html" class="hover:text-sky-400"><i class="fa-solid fa-cart-shopping"></i></a>
+      <a href="profile.html" class="hover:text-sky-400"><i class="fa-solid fa-user"></i></a>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE -->
+<main class="max-w-7xl mx-auto px-6 mt-12">
+
+  <!-- SORT -->
+  <div class="flex justify-end mb-10">
+    <select id="sort-by"
+      class="bg-slate-900 border border-slate-800 text-white rounded-xl px-4 py-2
+      focus:ring-2 focus:ring-sky-500 outline-none">
+      <option value="">Sort: Default</option>
+      <option value="price-asc">Price: Low → High</option>
+      <option value="price-desc">Price: High → Low</option>
+    </select>
+  </div>
+
+  <div class="flex flex-col lg:flex-row gap-12">
+
+    <!-- FILTERS -->
+    <aside class="w-full lg:w-64">
+      <div class="space-y-10 sticky top-28">
+
+        <div>
+          <h5 class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">
+            Categories
+          </h5>
+          <ul class="space-y-1 category-list">
+            <li data-category="all" class="filter-item active"><i class="fa-solid fa-border-all"></i> All</li>
+            <li data-category="Laptops" class="filter-item"><i class="fa-solid fa-laptop"></i> Laptops</li>
+            <li data-category="Gaming" class="filter-item"><i class="fa-solid fa-gamepad"></i> Gaming</li>
+            <li data-category="Accessories" class="filter-item"><i class="fa-solid fa-headphones"></i> Accessories</li>
+            <li data-category="Smartphone" class="filter-item"><i class="fa-solid fa-mobile"></i> Smartphone</li>
+            <li data-category="Clothing" class="filter-item"><i class="fa-solid fa-shirt"></i> Clothing</li>
+            <li data-category="Footwear" class="filter-item"><i class="fa-solid fa-shoe-prints"></i> Footwear</li>
+          </ul>
+        </div>
+
+        <div>
+          <h5 class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">
+            Min Rating
+          </h5>
+          <ul class="space-y-1 rate-list">
+            <li data-rate="all" class="filter-item active">Any Rating</li>
+            <li data-rate="5" class="filter-item text-yellow-400">⭐⭐⭐⭐⭐</li>
+            <li data-rate="4" class="filter-item text-yellow-400">⭐⭐⭐⭐</li>
+            <li data-rate="3" class="filter-item text-yellow-400">⭐⭐⭐</li>
+          </ul>
+        </div>
+
+      </div>
+    </aside>
+
+    <!-- PRODUCTS -->
+    <section class="flex-1">
+      <div id="products-container"
+        class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10"></div>
+
+      <div id="pagination-container"
+        class="flex justify-center mt-16 gap-3"></div>
+    </section>
+
+  </div>
+</main>
+
+<!-- MODAL -->
+<div id="product-modal"
+  class="fixed inset-0 hidden bg-slate-950/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+  <div class="glass rounded-3xl w-full max-w-4xl max-h-[90vh] overflow-y-auto relative p-8">
+    <button id="close-modal"
+      class="absolute top-6 right-6 text-3xl text-slate-400 hover:text-white">&times;</button>
+    <div id="modal-content" class="grid md:grid-cols-2 gap-10"></div>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="api.js"></script>
+<script src="create-product.js"></script>
+<script src="my-products.js"></script>
+<script src="shop.js"></script>
+
+</body>
+</html>
+
